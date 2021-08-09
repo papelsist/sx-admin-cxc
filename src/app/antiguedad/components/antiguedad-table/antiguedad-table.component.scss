@@ -1,0 +1,31 @@
+.mat-table {
+  overflow: auto;
+  min-height: 400px;
+  max-height: 450px;
+}
+
+.mat-column-cliente{
+  min-width: 300px;
+}
+.mat-column-plazo {
+  max-width: 50px;
+}
+.mat-column-limiteDeCredito {
+  max-width: 110px;
+  font-size: 11px;
+}
+.mat-column-tipoVencimiento, .mat-column-facturas{
+  max-width: 60px;
+  font-size: 10px;
+}
+.mat-row {
+  cursor: pointer;
+  min-height: 35px;
+  position: relative; // For matRipple
+  &:hover {
+    background: rgba(105, 71, 7, 0.09);
+  }
+  &:active {
+    background: #f5f5f5;
+  }
+}

@@ -1,0 +1,76 @@
+<mat-card>
+  <div layout="row" layout-align="start center" class="pad-left-sm pad-right-sm">
+    <span class="push-left-sm">
+      <span class="mat-title">Facturas a revisión</span>
+    </span>
+    <span *ngIf="!searchBox.searchVisible" class="push-left-sm">
+      <span *ngIf="selectedRows.length" class="mat-body-1">
+        {{selectedRows.length}} registro(s) seleccionados
+      </span>
+    </span>
+    <div layout class="pad-left pad-right pad-top" layout-align="center center">
+
+      <mat-form-field class="pad-left">
+        <input matInput placeholder="Sucursal" type="text" (input)="sucursal$.next($event.target.value)">
+      </mat-form-field>
+      <mat-form-field class="pad-left" [style.max-width.px]="100">
+        <input matInput placeholder="Cobrador" type="number" (input)="cobrador$.next($event.target.value)">
+      </mat-form-field>
+      <mat-form-field class="pad-left" [style.max-width.px]="120">
+        <input matInput placeholder="Factura" type="number" (input)="factura$.next($event.target.value)">
+      </mat-form-field>
+      <mat-form-field class="pad-left pad-right">
+        <input matInput placeholder="Revisión / Cobro" type="date" (input)="fechaRevision$.next($event.target.value)">
+      </mat-form-field>
+
+      <span layout=column>
+        <mat-checkbox (change)="porRecibir$.next($event.source.checked)" class="pad-right">Por recibir</mat-checkbox>
+        <mat-checkbox (change)="porRevisar$.next($event.source.checked)">Por revisar</mat-checkbox>
+      </span>
+    </div>
+    <td-search-box #searchBox backIcon="arrow_back" class="push-right-sm" placeholder="Buscar" (searchDebounce)="search($event)"
+      flex>
+    </td-search-box>
+    <span>
+      <button mat-icon-button [matMenuTriggerFor]="toolbarMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #toolbarMenu="matMenu">
+        <button mat-menu-item (click)="load()">
+          <mat-icon>refresh</mat-icon> Refrescar
+        </button>
+        <button mat-menu-item (click)="generar()">
+          <mat-icon>build</mat-icon> Generar
+        </button>
+        <button mat-menu-item (click)="recalcular()">
+          <mat-icon>swap_vert</mat-icon> Actualizar
+        </button>
+        <button mat-menu-item (click)="reporte()">
+          <mat-icon>picture_as_pdf</mat-icon> Reporte
+        </button>
+        <ng-container *ngIf="isSelectionEditable()">
+          <button mat-menu-item (click)="recepcion(true)">
+            <mat-icon>event_available</mat-icon> Recepción SUC
+          </button>
+          <button mat-menu-item (click)="cancelarRecepcion()">
+            <mat-icon>event_busy</mat-icon> Cancelar Recepción
+          </button>
+          <button mat-menu-item (click)="revisada()">
+            <mat-icon class="tc-green-500">check_circle</mat-icon> Revisada
+          </button>
+          <button mat-menu-item (click)="edit()">
+            <mat-icon>edit</mat-icon> Modificar
+          </button>
+        </ng-container>
+      </mat-menu>
+    </span>
+  </div>
+  <mat-divider></mat-divider>
+  <div>
+    <ng-template tdLoading [tdLoadingUntil]="!(loading$ | async)" tdLoadingStrategy="overlay">
+      <sx-ventas-credito-table #table [data]="facturas$ | async" (selection)="onSelection($event)" [selectedRows]="selectedRows">
+      </sx-ventas-credito-table>
+    </ng-template>
+  </div>
+
+</mat-card>

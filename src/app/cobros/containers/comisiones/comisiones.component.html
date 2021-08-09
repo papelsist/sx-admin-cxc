@@ -1,0 +1,73 @@
+<ng-template tdLoading [tdLoadingUntil]="!loading" tdLoadingStrategy="overlay" >
+
+  <mat-card >
+  <div layout layout-align="start center" flex class="pad-left-sm pad-right-sm">
+    <span class="push-left-sm">
+      <span class="mat-title">Comisiones (Cobradores/Vendedores)</span>
+    </span>
+    <a class="pad-left pad-right" mat-button (click)="changePeriodo()">{{periodo.toString()}}</a>
+    <span flex></span>
+    <div layout class="pad-right pad-left">
+
+      <mat-form-field class="pad-left pad-right">
+        <input matInput placeholder="Factura" (keyup)="factura$.next(factura.value)" #factura autocomplete="false">
+      </mat-form-field>
+      <mat-form-field class="pad-left pad-right">
+        <input matInput placeholder="Cliente" (keyup)="cliente$.next(cliente.value)" #cliente autocomplete="false">
+      </mat-form-field>
+
+      <mat-form-field class="pad-left pad-right">
+        <input matInput placeholder="Comisionista" (keyup)="comisionista$.next(comisionista.value)" #comisionista autocomplete="off">
+      </mat-form-field>
+
+    </div>
+
+    <span flex></span>
+    <span>
+      <button mat-icon-button [matMenuTriggerFor]="toolbarMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #toolbarMenu="matMenu">
+        <button mat-menu-item (click)="generar()"><mat-icon>settings</mat-icon>Generar</button>
+        <button mat-menu-item (click)="reporteDeComisiones()"><mat-icon>picture_as_pdf</mat-icon> Rep Comisiones</button>
+      </mat-menu>
+    </span>
+
+  </div>
+  <mat-divider></mat-divider>
+  <div class="mat-elevation-z8 comisiones-table-container">
+    <sx-comisiones-table [comisiones]="comisiones$ | async"></sx-comisiones-table>
+  </div>
+
+  </mat-card>
+  <div layout>
+    <span flex></span>
+    <mat-card>
+      <mat-divider></mat-divider>
+      <div class="totales-panel" layout="column">
+        <mat-list *ngIf="totales$ | async as totales">
+          <mat-list-item>
+            <span class="text-right ">Totales</span>
+            <mat-divider></mat-divider>
+          </mat-list-item>
+          <mat-list-item>
+            <p matLine> Facturas</p>
+            <h3>{{totales.facturas}}</h3>
+            <mat-divider insert></mat-divider>
+          </mat-list-item>
+          <mat-list-item>
+            <p matLine> Importe comisionable</p>
+            <h3>{{totales.importe | currency}}</h3>
+            <mat-divider insert></mat-divider>
+          </mat-list-item>
+          <mat-list-item>
+            <p matLine> Comisión</p>
+            <h3>{{totales.total | currency}}</h3>
+            <mat-divider insert></mat-divider>
+          </mat-list-item>
+        </mat-list>
+      </div>
+    </mat-card>
+
+  </div>
+</ng-template>
